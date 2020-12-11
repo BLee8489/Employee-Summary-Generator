@@ -12,7 +12,7 @@ const render = require("./lib/htmlRenderer");
 
 const allEmployees = [];
 
-// Ask user questions about each employee
+// Ask user which employee
 function getEmployeeRole() {
     inquirer.prompt([{
             type: "list",
@@ -22,9 +22,9 @@ function getEmployeeRole() {
         }, ])
         .then((res) => {
             console.log(res);
-            if (res.titleInput === "Manager") {
+            if (res.role === "Manager") {
                 addManager()
-            } else if (res.titleInput === "Engineer") {
+            } else if (res.role === "Engineer") {
                 addEngineer()
             } else {
                 addIntern()
@@ -40,7 +40,6 @@ function addEmployee() {
         name: "confirmEmployee",
         default: true
     }]).then((res) => {
-        //console.log(res)
 
         if (res.confirmEmployee === true) {
             getEmployeeRole();
@@ -55,7 +54,7 @@ function addManager() {
     inquirer.prompt([{
             type: "input",
             message: "What is the Manager's name?",
-            name: "managername",
+            name: "managerName",
         }, {
             type: "input",
             message: "Please enter Manager employee ID.",
@@ -69,7 +68,7 @@ function addManager() {
             message: "Please provide office phone number for the Manager.",
             name: "officeNumber",
         }, ])
-        .then((managerRes) => {
+        .then((res) => {
             console.log(res);
             const newManager = new Manager(res.managerName, res.managerID, res.email, res.officeNumber);
             allEmployees.push(newManager);
@@ -99,7 +98,7 @@ function addEngineer() {
                 name: "engineerGithub",
             },
         ])
-        .then((engineerRes) => {
+        .then((res) => {
             console.log(res);
             const newEngineer = new Engineer(res.engineerName, res.engineerID, res.engineerEmail, res.engineerGithub);
             allEmployees.push(newEngineer);
@@ -125,25 +124,28 @@ function addIntern() {
         },
         {
             type: "input",
-            message: "Please enter Intern;s school.",
+            message: "Please enter Intern's school.",
             name: "internSchool"
         },
     ]).then((res) => {
         console.log(res);
-        const newIntern = new Intern(res.interName, res.internID, res.internEmail, res.internSchool);
+        const newIntern = new Intern(res.internName, res.internID, res.internEmail, res.internSchool);
         allEmployees.push(newIntern);
         addEmployee();
     });
 };
+// Function to write team.html file in output folder
+function renderMain() {
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR)
+    }
+    // const HTML = render(allEmployees);
+    fs.writeFile(outputPath, render(allEmployees), "utf-8", () => {
+        if (err) throw err
+    })
+}
 
-
-
-
-
-])
-
-
-
+getEmployeeRole()
 
 
 
