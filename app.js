@@ -141,7 +141,7 @@ function renderMain() {
     }
     // const HTML = render(allEmployees);
     fs.writeFile(outputPath, render(allEmployees), "utf-8", () => {
-        if (err) throw err
+        // if (err) throw err
     })
 }
 
